@@ -2,8 +2,8 @@ baseurl = "http://andrewwalker.github.io/statefultransitions/"
 languageCode = "en-us"
 title = "Stateful Transitions"
 theme = "purehugo"
-description = "rubbish"
 Paginate = 5
+disqusShortname = "disqus_walkera"
 
 [params]
     description = "Life-long learning in mathematics, science and computing"
