@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Posts on Stateful Transitions</title>
-    <link>http://localhost:1313/post/</link>
-    <description>Recent content in Posts on Stateful Transitions</description>
+    <title>Matlab on Stateful Transitions</title>
+    <link>http://localhost:1313/tags/matlab/</link>
+    <description>Recent content in Matlab on Stateful Transitions</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Tue, 19 May 2015 21:35:28 +1000</lastBuildDate>
-    <atom:link href="http://localhost:1313/post/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/tags/matlab/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Making numpy&#39;s spacing more like MATLAB&#39;s eps</title>
@@ -55,15 +55,6 @@ also deals with complex values, which is critical for conformal mapping.&lt;/p&g
     return np.spacing(np.max([zre, zim]))
 &lt;/code&gt;&lt;/pre&gt;
 </description>
-    </item>
-    
-    <item>
-      <title>welcome</title>
-      <link>http://localhost:1313/post/welcome/</link>
-      <pubDate>Tue, 19 May 2015 20:55:21 +1000</pubDate>
-      
-      <guid>http://localhost:1313/post/welcome/</guid>
-      <description></description>
     </item>
     
   </channel>

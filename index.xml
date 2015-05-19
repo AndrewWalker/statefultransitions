@@ -6,8 +6,56 @@
     <description>Recent content on Stateful Transitions</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 19 May 2015 20:55:21 +1000</lastBuildDate>
+    <lastBuildDate>Tue, 19 May 2015 21:35:28 +1000</lastBuildDate>
     <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Making numpy&#39;s spacing more like MATLAB&#39;s eps</title>
+      <link>http://localhost:1313/post/matlabeps/</link>
+      <pubDate>Tue, 19 May 2015 21:35:28 +1000</pubDate>
+      
+      <guid>http://localhost:1313/post/matlabeps/</guid>
+      <description>&lt;p&gt;Anyone who has worked with scientists knows the tension between MATLAB and
+Python, the oft-repeated closed vs open source debate. For those who straddle
+the gap, it&amp;rsquo;s important to know where to go to get help when you&amp;rsquo;re moving
+between the two worlds.  From a Python perspective, the most upto date
+reference is &lt;a href=&#34;http://wiki.scipy.org/NumPy_for_Matlab_Users&#34;&gt;Numpy for MATLAB
+users&lt;/a&gt; on the scipy wiki.&lt;/p&gt;
+
+&lt;p&gt;During the process of porting the &lt;a href=&#34;https://github.com/AndrewWalker/cmtoolkit&#34;&gt;conformal mapping
+toolkit&lt;/a&gt;, one of the issues that
+came up related to MATLAB&amp;rsquo;s &lt;a href=&#34;mathworks.com/help/matlab/ref/eps.html&#34;&gt;eps&lt;/a&gt;
+function. This function determines what the interval to the next floating point
+number is - an important prerequisite in doing approximately equal tests on
+floating point numbers.&lt;/p&gt;
+
+&lt;p&gt;The guide (correctly) describes that &lt;code&gt;eps&lt;/code&gt; is equivalent to the numpy
+&lt;a href=&#34;http://docs.scipy.org/doc/numpy/reference/ufuncs.html&#34;&gt;ufunc&lt;/a&gt; &lt;code&gt;np.spacing(1)&lt;/code&gt;.
+More information about exactly what spacing does is provided by the numpy
+&lt;code&gt;info&lt;/code&gt; function:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;import numpy as np
+
+np.info(np.spacing) 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The documentation states that the ufunc returns &amp;ldquo;the distance between x and the
+nearest adjacent number&amp;rdquo;.  However, MATLAB`s eps seems to differ from spacing
+in two important ways.  Firstly, the values it returns are always positive
+(it&amp;rsquo;s the &lt;em&gt;absolute&lt;/em&gt;) spacing information. Second, and more importantly, it
+also deals with complex values, which is critical for conformal mapping.&lt;/p&gt;
+
+&lt;p&gt;So a slightly revised version of &lt;code&gt;eps&lt;/code&gt; for python might read:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;def eps(z):
+    &amp;quot;&amp;quot;&amp;quot;Equivalent to MATLAB eps
+    &amp;quot;&amp;quot;&amp;quot;
+    zre = np.real(z)
+    zim = np.imag(z)
+    return np.spacing(np.max([zre, zim]))
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
     
     <item>
       <title>welcome</title>
