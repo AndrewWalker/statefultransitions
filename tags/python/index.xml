@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Python on Stateful Transitions</title>
-    <link>http://localhost:1313/tags/python/</link>
+    <link>http://localhost:1313/statefultransitions/tags/python/</link>
     <description>Recent content in Python on Stateful Transitions</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Tue, 19 May 2015 21:35:28 +1000</lastBuildDate>
-    <atom:link href="http://localhost:1313/tags/python/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/statefultransitions/tags/python/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Making numpy&#39;s spacing more like MATLAB&#39;s eps</title>
-      <link>http://localhost:1313/post/matlabeps/</link>
+      <link>http://localhost:1313/statefultransitions/post/matlabeps/</link>
       <pubDate>Tue, 19 May 2015 21:35:28 +1000</pubDate>
       
-      <guid>http://localhost:1313/post/matlabeps/</guid>
+      <guid>http://localhost:1313/statefultransitions/post/matlabeps/</guid>
       <description>&lt;p&gt;Anyone who has worked with scientists knows the tension between MATLAB and
 Python, the oft-repeated closed vs open source debate. For those who straddle
 the gap, it&amp;rsquo;s important to know where to go to get help when you&amp;rsquo;re moving
