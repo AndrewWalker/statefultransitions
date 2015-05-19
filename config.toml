@@ -3,7 +3,7 @@ languageCode = "en-us"
 title = "Stateful Transitions"
 theme = "purehugo"
 Paginate = 5
-disqusShortname = "disqus_walkera"
+disqusShortname = "statefultransitions"
 
 [params]
     description = "Life-long learning in mathematics, science and computing"
