@@ -1,0 +1,10 @@
+languageCode = "en-us"
+title = "Stateful Transitions"
+theme = "purehugo"
+description = "rubbish"
+Paginate = 5
+
+[params]
+    description = "Life-long learning in mathematics, science and computing"
+    twitter = "walkera101"
+    github = "AndrewWalker"
