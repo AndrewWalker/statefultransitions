@@ -1,3 +1,4 @@
+baseurl = "http://andrewwalker.github.io/statefultransitions/"
 languageCode = "en-us"
 title = "Stateful Transitions"
 theme = "purehugo"
