@@ -19,3 +19,9 @@ Adding new content
 ```shell
 hugo new post/something.md
 ```
+
+Publishing to gh-pages branch
+
+```shell
+git subtree push --prefix=public git@github.com:AndrewWalker/statefultransitions.git gh-pages
+```
