@@ -1,1 +1,0 @@
-Stateful transitions blog

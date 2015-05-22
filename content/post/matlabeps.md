@@ -1,7 +1,7 @@
 +++
-Categories = []
+Categories = ["python", "matlab"]
 Description = ""
-Tags = ["python", "matlab"]
+Tags = []
 date = "2015-05-19T21:35:28+10:00"
 title = "Making numpy's spacing more like MATLAB's eps"
 
