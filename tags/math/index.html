@@ -3,17 +3,17 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Posts &middot; Stateful Transitions</title>
+    <title>Math &middot; Stateful Transitions</title>
 
     <meta name="description" content="Life-long learning in mathematics, science and computing">
 
     <meta name="twitter:card" content="summary">
     <meta name="twitter:site" content="walkera101" />
-    <meta name="twitter:title" content="Posts &middot; Stateful Transitions">
+    <meta name="twitter:title" content="Math &middot; Stateful Transitions">
     <meta name="twitter:description" content="Life-long learning in mathematics, science and computing">
 
     <meta property="og:type" content="article">
-    <meta property="og:title" content="Posts &middot; Stateful Transitions">
+    <meta property="og:title" content="Math &middot; Stateful Transitions">
     <meta property="og:description" content="Life-long learning in mathematics, science and computing">
 
     <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700|Oxygen:400,700' rel='stylesheet' type='text/css'>
@@ -151,87 +151,6 @@ initution into more complex systems.</p>
 </tbody>
 </table>
 
-                    </div>
-                </section>
-                
-                <h1 class="content-subhead">19 May 2015, 21:35</h1>
-                <section class="post">
-                    <header class="post-header">
-
-                        <a href="http://localhost:1313/statefultransitions/post/matlabeps/" class="post-title">Making numpy&#39;s spacing more like MATLAB&#39;s eps</a>
-
-                        <p class="post-meta">
-                            
-                            
-                                under 
-                                
-                                <a class="post-category post-category-python" href="http://localhost:1313/statefultransitions/categories/python">python</a><a class="post-category post-category-matlab" href="http://localhost:1313/statefultransitions/categories/matlab">matlab</a>
-                            
-                        </p>
-                    </header>
-
-                    <div class="post-description">
-                        <p>Anyone who has worked with scientists knows the tension between MATLAB and
-Python, the oft-repeated closed vs open source debate. For those who straddle
-the gap, it&rsquo;s important to know where to go to get help when you&rsquo;re moving
-between the two worlds.  From a Python perspective, the most upto date
-reference is <a href="http://wiki.scipy.org/NumPy_for_Matlab_Users">Numpy for MATLAB
-users</a> on the scipy wiki.</p>
-
-<p>During the process of porting the <a href="https://github.com/AndrewWalker/cmtoolkit">conformal mapping
-toolkit</a>, one of the issues that
-came up related to MATLAB&rsquo;s <a href="mathworks.com/help/matlab/ref/eps.html">eps</a>
-function. This function determines what the interval to the next floating point
-number is - an important prerequisite in doing approximately equal tests on
-floating point numbers.</p>
-
-<p>The guide (correctly) describes that <code>eps</code> is equivalent to the numpy
-<a href="http://docs.scipy.org/doc/numpy/reference/ufuncs.html">ufunc</a> <code>np.spacing(1)</code>.
-More information about exactly what spacing does is provided by the numpy
-<code>info</code> function:</p>
-
-<pre><code class="language-python">import numpy as np
-
-np.info(np.spacing) 
-</code></pre>
-
-<p>The documentation states that the ufunc returns &ldquo;the distance between x and the
-nearest adjacent number&rdquo;.  However, MATLAB`s eps seems to differ from spacing
-in two important ways.  Firstly, the values it returns are always positive
-(it&rsquo;s the <em>absolute</em>) spacing information. Second, and more importantly, it
-also deals with complex values, which is critical for conformal mapping.</p>
-
-<p>So a slightly revised version of <code>eps</code> for python might read:</p>
-
-<pre><code class="language-python">def eps(z):
-    &quot;&quot;&quot;Equivalent to MATLAB eps
-    &quot;&quot;&quot;
-    zre = np.real(z)
-    zim = np.imag(z)
-    return np.spacing(np.max([zre, zim]))
-</code></pre>
-
-                    </div>
-                </section>
-                
-                <h1 class="content-subhead">19 May 2015, 20:55</h1>
-                <section class="post">
-                    <header class="post-header">
-
-                        <a href="http://localhost:1313/statefultransitions/post/welcome/" class="post-title">welcome</a>
-
-                        <p class="post-meta">
-                            
-                            
-                                under 
-                                
-                                
-                            
-                        </p>
-                    </header>
-
-                    <div class="post-description">
-                        
                     </div>
                 </section>
                 
