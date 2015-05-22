@@ -2,23 +2,23 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://localhost:1313/statefultransitions/</loc>
+    <loc>http://andrewwalker.github.io/statefultransitions/</loc>
     <lastmod>2015-05-22T09:47:11+10:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://localhost:1313/statefultransitions/post/markov-chains/</loc>
+    <loc>http://andrewwalker.github.io/statefultransitions/post/markov-chains/</loc>
     <lastmod>2015-05-22T09:47:11+10:00</lastmod>
   </url>
   
   <url>
-    <loc>http://localhost:1313/statefultransitions/post/matlabeps/</loc>
+    <loc>http://andrewwalker.github.io/statefultransitions/post/matlabeps/</loc>
     <lastmod>2015-05-19T21:35:28+10:00</lastmod>
   </url>
   
   <url>
-    <loc>http://localhost:1313/statefultransitions/post/welcome/</loc>
+    <loc>http://andrewwalker.github.io/statefultransitions/post/welcome/</loc>
     <lastmod>2015-05-19T20:55:21+10:00</lastmod>
   </url>
   
