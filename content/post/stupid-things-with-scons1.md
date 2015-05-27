@@ -81,7 +81,7 @@ And eventually:
 exec _file_ in call_stack[-1].globals
 ```
 
-The consequence of this is that, to the best of my knowledge, no easy way to decorate the SConscript method. 
+The consequence of this is that, to the best of my knowledge, there is no easy way to decorate the SConscript method. 
 
 All's not lost, the dynamic nature of Python means we can reach directly into the SConcript module, introspect data about the code, including getting the original source code (using [inspect](https://docs.python.org/2/library/inspect.html), rewrite the lines of that function, [exec](https://docs.python.org/2/reference/simple_stmts.html#exec) that string in the context of the original functions scope, before replacing the function back on the class with [setattr](https://docs.python.org/2/library/functions.html#setattr). The final result, while ugly is functional.
 

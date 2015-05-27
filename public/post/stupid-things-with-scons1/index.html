@@ -154,7 +154,7 @@ old_file = call_stack[-1].globals.get('__file__')
 <pre><code class="language-python">exec _file_ in call_stack[-1].globals
 </code></pre>
 
-<p>The consequence of this is that, to the best of my knowledge, no easy way to decorate the SConscript method.</p>
+<p>The consequence of this is that, to the best of my knowledge, there is no easy way to decorate the SConscript method.</p>
 
 <p>All&rsquo;s not lost, the dynamic nature of Python means we can reach directly into the SConcript module, introspect data about the code, including getting the original source code (using <a href="https://docs.python.org/2/library/inspect.html">inspect</a>, rewrite the lines of that function, <a href="https://docs.python.org/2/reference/simple_stmts.html#exec">exec</a> that string in the context of the original functions scope, before replacing the function back on the class with <a href="https://docs.python.org/2/library/functions.html#setattr">setattr</a>. The final result, while ugly is functional.</p>
 
