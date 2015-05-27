@@ -17,7 +17,7 @@
       <guid>http://andrewwalker.github.io/statefultransitions/post/stupid-things-with-scons1/</guid>
       <description>&lt;p&gt;&lt;em&gt;TL;DR&lt;/em&gt; Don&amp;rsquo;t use the Python callstack to find variables - it can lead to subtle problems for users of your code.&lt;/p&gt;
 
-&lt;p&gt;This post came about as part of an investigation into extending &lt;a href=&#34;http://www.scons.org/&#34;&gt;SCons&lt;/a&gt; functionality without having to alter the source code. The primary objective was to validate that the absolute path of an SConscript file exists, or provide (improved) feedback if it doesn&amp;rsquo;t. This is important in situations where you&amp;rsquo;re using variant build directories (build and release) and your builds are spread over many directories.  This is one of the things SCons is particularly poor at reporting diagnostics for.&lt;/p&gt;
+&lt;p&gt;This post came about as part of an investigation into extending &lt;a href=&#34;http://www.scons.org/&#34;&gt;SCons&lt;/a&gt; functionality without having to alter the source code. The primary objective was to validate that the absolute path of an SConscript file exists, or provide (improved) feedback if it doesn&amp;rsquo;t. This is important in situations where you&amp;rsquo;re using variant build directories (debug and release) and your builds are spread over many directories.  This is one of the things SCons is particularly poor at reporting diagnostics for.&lt;/p&gt;
 
 &lt;p&gt;If this was just Python, without the magic of SCons happening, this really would be trivial, in fact it&amp;rsquo;s one of those things that Python excels at.&lt;/p&gt;
 
