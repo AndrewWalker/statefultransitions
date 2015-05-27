@@ -88,7 +88,7 @@
                     <div class="post-description">
                         <p><em>TL;DR</em> Don&rsquo;t use the Python callstack to find variables - it can lead to subtle problems for users of your code.</p>
 
-<p>This post came about as part of an investigation into extending <a href="http://www.scons.org/">SCons</a> functionality without having to alter the source code. The primary objective was to validate that the absolute path of an SConscript file exists, or provide (improved) feedback if it doesn&rsquo;t. This is important in situations where you&rsquo;re using variant build directories (build and release) and your builds are spread over many directories.  This is one of the things SCons is particularly poor at reporting diagnostics for.</p>
+<p>This post came about as part of an investigation into extending <a href="http://www.scons.org/">SCons</a> functionality without having to alter the source code. The primary objective was to validate that the absolute path of an SConscript file exists, or provide (improved) feedback if it doesn&rsquo;t. This is important in situations where you&rsquo;re using variant build directories (debug and release) and your builds are spread over many directories.  This is one of the things SCons is particularly poor at reporting diagnostics for.</p>
 
 <p>If this was just Python, without the magic of SCons happening, this really would be trivial, in fact it&rsquo;s one of those things that Python excels at.</p>
 
