@@ -87,7 +87,9 @@ old_file = call_stack[-1].globals.get(&#39;__file__&#39;)
 
 &lt;p&gt;All&amp;rsquo;s not lost, the dynamic nature of Python means we can reach directly into the SConcript module, introspect data about the code, including getting the original source code (using &lt;a href=&#34;https://docs.python.org/2/library/inspect.html&#34;&gt;inspect&lt;/a&gt;, rewrite the lines of that function, &lt;a href=&#34;https://docs.python.org/2/reference/simple_stmts.html#exec&#34;&gt;exec&lt;/a&gt; that string in the context of the original functions scope, before replacing the function back on the class with &lt;a href=&#34;https://docs.python.org/2/library/functions.html#setattr&#34;&gt;setattr&lt;/a&gt;. The final result, while ugly is functional.&lt;/p&gt;
 
-&lt;p&gt;The end result looks like the ugliest Python I&amp;rsquo;ve written for a long while - and somehow I don&amp;rsquo;t think this ones going to make it past code-review.&lt;/p&gt;
+&lt;p&gt;The &lt;a href=&#34;https://gist.github.com/AndrewWalker/d9d74f5f46651c6607b4&#34;&gt;final result&lt;/a&gt;
+looks like the ugliest Python I&amp;rsquo;ve written for a long while. Somehow I don&amp;rsquo;t
+think this ones going to make it past code-review.&lt;/p&gt;
 </description>
     </item>
     
