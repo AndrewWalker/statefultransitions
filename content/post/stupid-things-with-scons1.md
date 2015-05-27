@@ -7,7 +7,7 @@ title = "Stupid Things to do with SCons"
 
 +++
 
-*TL;DR* Don't use the Python callstack to find variables - it can lead to subtle problems for user of your code.
+*TL;DR* Don't use the Python callstack to find variables - it can lead to subtle problems for users of your code.
 
 This post came about as part of an investigation into extending [SCons](http://www.scons.org/) functionality without having to alter the source code. The primary objective was to validate that the absolute path of an SConscript file exists, or provide (improved) feedback if it doesn't. This is important in situations where you're using variant build directories (build and release) and your builds are spread over many directories.  This is one of the things SCons is particularly poor at reporting diagnostics for. 
 
