@@ -3,18 +3,18 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Python &middot; Stateful Transitions</title>
+    <title>Stupid Things to do with SCons &middot; Stateful Transitions</title>
 
-    <meta name="description" content="Life-long learning in mathematics, science and computing">
+    <meta name="description" content="">
 
     <meta name="twitter:card" content="summary">
     <meta name="twitter:site" content="walkera101" />
-    <meta name="twitter:title" content="Python &middot; Stateful Transitions">
-    <meta name="twitter:description" content="Life-long learning in mathematics, science and computing">
+    <meta name="twitter:title" content="Stupid Things to do with SCons &middot; Stateful Transitions">
+    <meta name="twitter:description" content="">
 
     <meta property="og:type" content="article">
-    <meta property="og:title" content="Python &middot; Stateful Transitions">
-    <meta property="og:description" content="Life-long learning in mathematics, science and computing">
+    <meta property="og:title" content="Stupid Things to do with SCons &middot; Stateful Transitions">
+    <meta property="og:description" content="">
 
     <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700|Oxygen:400,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/pure-min.css">
@@ -58,7 +58,6 @@
         <div>
             
             <div class="posts">
-                
                 <h1 class="content-subhead">27 May 2015, 20:21</h1>
                 <section class="post">
                     <header class="post-header">
@@ -75,6 +74,17 @@
                         </p>
                     </header>
 
+                    <div class="post-share">
+                        <div class="post-share-links">
+                            <h4 style="">Share</h4>
+                            <a href="#" data-type="facebook" data-url="http://andrewwalker.github.io/statefultransitions/post/stupid-things-with-scons1/" data-title="Stupid Things to do with SCons" data-description="" data-media="" class="prettySocial fa fa-facebook"></a>
+                            <a href="#" data-type="googleplus" data-url="http://andrewwalker.github.io/statefultransitions/post/stupid-things-with-scons1/" data-description="" class="prettySocial fa fa-google-plus"></a>
+                            
+                            <a href="#" data-type="twitter" data-url="http://andrewwalker.github.io/statefultransitions/post/stupid-things-with-scons1/" data-description="" data-via="walkera101" class="prettySocial fa fa-twitter"></a>
+                            
+                            
+                        </div>
+                    </div>
                     <div class="post-description">
                         <p><em>TL;DR</em> Don&rsquo;t use the Python callstack to find variables - it can lead to subtle problems for user of your code.</p>
 
@@ -151,71 +161,23 @@ old_file = call_stack[-1].globals.get('__file__')
 <p>The end result looks like the ugliest Python I&rsquo;ve written for a long while - and somehow I don&rsquo;t think this ones going to make it past code-review.</p>
 
                     </div>
+                    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'statefultransitions';
+    var disqus_identifier = 'http:\/\/andrewwalker.github.io\/statefultransitions\/post\/stupid-things-with-scons1\/';
+    var disqus_title = 'Stupid Things to do with SCons';
+    var disqus_url = 'http:\/\/andrewwalker.github.io\/statefultransitions\/post\/stupid-things-with-scons1\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
                 </section>
-                
-                <h1 class="content-subhead">19 May 2015, 21:35</h1>
-                <section class="post">
-                    <header class="post-header">
-
-                        <a href="http://andrewwalker.github.io/statefultransitions/post/matlabeps/" class="post-title">Making numpy&#39;s spacing more like MATLAB&#39;s eps</a>
-
-                        <p class="post-meta">
-                            
-                            
-                                under 
-                                
-                                <a class="post-category post-category-python" href="http://andrewwalker.github.io/statefultransitions/categories/python">python</a><a class="post-category post-category-matlab" href="http://andrewwalker.github.io/statefultransitions/categories/matlab">matlab</a>
-                            
-                        </p>
-                    </header>
-
-                    <div class="post-description">
-                        <p>Anyone who has worked with scientists knows the tension between MATLAB and
-Python, the oft-repeated closed vs open source debate. For those who straddle
-the gap, it&rsquo;s important to know where to go to get help when you&rsquo;re moving
-between the two worlds.  From a Python perspective, the most upto date
-reference is <a href="http://wiki.scipy.org/NumPy_for_Matlab_Users">Numpy for MATLAB
-users</a> on the scipy wiki.</p>
-
-<p>During the process of porting the <a href="https://github.com/AndrewWalker/cmtoolkit">conformal mapping
-toolkit</a>, one of the issues that
-came up related to MATLAB&rsquo;s <a href="mathworks.com/help/matlab/ref/eps.html">eps</a>
-function. This function determines what the interval to the next floating point
-number is - an important prerequisite in doing approximately equal tests on
-floating point numbers.</p>
-
-<p>The guide (correctly) describes that <code>eps</code> is equivalent to the numpy
-<a href="http://docs.scipy.org/doc/numpy/reference/ufuncs.html">ufunc</a> <code>np.spacing(1)</code>.
-More information about exactly what spacing does is provided by the numpy
-<code>info</code> function:</p>
-
-<pre><code class="language-python">import numpy as np
-
-np.info(np.spacing) 
-</code></pre>
-
-<p>The documentation states that the ufunc returns &ldquo;the distance between x and the
-nearest adjacent number&rdquo;.  However, MATLAB`s eps seems to differ from spacing
-in two important ways.  Firstly, the values it returns are always positive
-(it&rsquo;s the <em>absolute</em>) spacing information. Second, and more importantly, it
-also deals with complex values, which is critical for conformal mapping.</p>
-
-<p>So a slightly revised version of <code>eps</code> for python might read:</p>
-
-<pre><code class="language-python">def eps(z):
-    &quot;&quot;&quot;Equivalent to MATLAB eps
-    &quot;&quot;&quot;
-    zre = np.real(z)
-    zim = np.imag(z)
-    return np.spacing(np.max([zre, zim]))
-</code></pre>
-
-                    </div>
-                </section>
-                
             </div>
-            
-
             <div class="footer">
     <div class="pure-menu pure-menu-horizontal pure-menu-open">
         <ul>
@@ -232,6 +194,7 @@ also deals with complex values, which is critical for conformal mapping.</p>
         </div>
     </div>
 </div>
+
 
 <script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

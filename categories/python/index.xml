@@ -6,8 +6,90 @@
     <description>Recent content in Python on Stateful Transitions</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 19 May 2015 21:35:28 +1000</lastBuildDate>
+    <lastBuildDate>Wed, 27 May 2015 20:21:27 +1000</lastBuildDate>
     <atom:link href="http://andrewwalker.github.io/statefultransitions/categories/python/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Stupid Things to do with SCons</title>
+      <link>http://andrewwalker.github.io/statefultransitions/post/stupid-things-with-scons1/</link>
+      <pubDate>Wed, 27 May 2015 20:21:27 +1000</pubDate>
+      
+      <guid>http://andrewwalker.github.io/statefultransitions/post/stupid-things-with-scons1/</guid>
+      <description>&lt;p&gt;&lt;em&gt;TL;DR&lt;/em&gt; Don&amp;rsquo;t use the Python callstack to find variables - it can lead to subtle problems for user of your code.&lt;/p&gt;
+
+&lt;p&gt;This post came about as part of an investigation into extending &lt;a href=&#34;http://www.scons.org/&#34;&gt;SCons&lt;/a&gt; functionality without having to alter the source code. The primary objective was to validate that the absolute path of an SConscript file exists, or provide (improved) feedback if it doesn&amp;rsquo;t. This is important in situations where you&amp;rsquo;re using variant build directories (build and release) and your builds are spread over many directories.  This is one of the things SCons is particularly poor at reporting diagnostics for.&lt;/p&gt;
+
+&lt;p&gt;If this was just Python, without the magic of SCons happening, this really would be trivial, in fact it&amp;rsquo;s one of those things that Python excels at.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;import os
+path = &#39;path/to/your/SConscript&#39;
+path = os.path.abspath(os.path.normpath(path))
+if not os.path.exists(path):
+    raise Exception(&#39;SConcript does not exist at %s&#39; % path)
+SConscript(path, ...)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Given enough SConscript files, this pattern is annoying and worthy of refactoring. One way to do that would be to pull that code out, and put it into an external module. Given that we&amp;rsquo;ll always want to do this with our calls to SConscript, it&amp;rsquo;s probably easier to adjust the SConscript method, rather than adding a second function. Altering the behavior of Python functions and methods at runtime by pre- or post- fixing code is most easily achieved by using &lt;a href=&#34;https://wiki.python.org/moin/PythonDecorators&#34;&gt;decorators&lt;/a&gt;, which is really just a fancy name for a function that wraps another function.&lt;/p&gt;
+
+&lt;p&gt;A modern decorator would look something like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;# scommon.py
+import os
+import wrapt
+
+@wrapt.decorator
+def sconcript_validator(wrapped, instance, args, kwargs):
+    path = args[0]
+    path = os.path.abspath(os.path.normpath(path))
+    if not os.path.exists(path):
+        raise Exception(&#39;SConcript does not exist at %s&#39; % path)
+    return wrapped(*args, **kwargs)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Note that I&amp;rsquo;ve chosen to make use of the &lt;a href=&#34;https://github.com/GrahamDumpleton/wrapt&#34;&gt;wrapt&lt;/a&gt; which deals with all the ugly corner cases of decorators for me.&lt;/p&gt;
+
+&lt;p&gt;This means that I can rewrite my SConstruct as:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;# SConstruct
+import scommon 
+menv = Environment()
+menv.SConscript = scommon.sconcript_validator(menv.SConscript)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And at that point I should be able to run SCons as per normal, with a nicely updated SConscript function, and everything should be rainbows and unicorns.&lt;/p&gt;
+
+&lt;p&gt;Except it isn&amp;rsquo;t. Instead SCons fails with the traceback&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ scons
+scons: Reading SConscript files ...
+
+scons: *** Export of non-existent variable &#39;&#39;menv&#39;&#39;
+File &amp;quot;/Users/username/tmp/scommon.py&amp;quot;, line 10, in sconcript_validator
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This occurs because SCons does much of it&amp;rsquo;s heavy lifting by making use of the Python callstack, finding targets via introspection of the call frames. Unfortunately, the way it does this is somewhat fragile, expecting calling code to be a certain number of stack frames above (the internals of) SConscript.&lt;/p&gt;
+
+&lt;p&gt;From SCons.Script.SConcript:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;# This is the magic line that actually reads up
+# and executes the stuff in the SConscript file
+# ...
+call_stack[-1].globals.update({stack_bottom:1})
+old_file = call_stack[-1].globals.get(&#39;__file__&#39;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And eventually:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;exec _file_ in call_stack[-1].globals
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The consequence of this is that, to the best of my knowledge, no easy way to decorate the SConscript method.&lt;/p&gt;
+
+&lt;p&gt;All&amp;rsquo;s not lost, the dynamic nature of Python means we can reach directly into the SConcript module, introspect data about the code, including getting the original source code (using &lt;a href=&#34;https://docs.python.org/2/library/inspect.html&#34;&gt;inspect&lt;/a&gt;, rewrite the lines of that function, &lt;a href=&#34;https://docs.python.org/2/reference/simple_stmts.html#exec&#34;&gt;exec&lt;/a&gt; that string in the context of the original functions scope, before replacing the function back on the class with &lt;a href=&#34;https://docs.python.org/2/library/functions.html#setattr&#34;&gt;setattr&lt;/a&gt;. The final result, while ugly is functional.&lt;/p&gt;
+
+&lt;p&gt;The end result looks like the ugliest Python I&amp;rsquo;ve written for a long while - and somehow I don&amp;rsquo;t think this ones going to make it past code-review.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Making numpy&#39;s spacing more like MATLAB&#39;s eps</title>

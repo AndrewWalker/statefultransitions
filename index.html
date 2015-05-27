@@ -59,6 +59,100 @@
             
             <div class="posts">
                 
+                <h1 class="content-subhead">27 May 2015, 20:21</h1>
+                <section class="post">
+                    <header class="post-header">
+
+                        <a href="http://andrewwalker.github.io/statefultransitions/post/stupid-things-with-scons1/" class="post-title">Stupid Things to do with SCons</a>
+
+                        <p class="post-meta">
+                            
+                            
+                                under 
+                                
+                                <a class="post-category post-category-python" href="http://andrewwalker.github.io/statefultransitions/categories/python">python</a><a class="post-category post-category-scons" href="http://andrewwalker.github.io/statefultransitions/categories/scons">scons</a>
+                            
+                        </p>
+                    </header>
+
+                    <div class="post-description">
+                        <p><em>TL;DR</em> Don&rsquo;t use the Python callstack to find variables - it can lead to subtle problems for user of your code.</p>
+
+<p>This post came about as part of an investigation into extending <a href="http://www.scons.org/">SCons</a> functionality without having to alter the source code. The primary objective was to validate that the absolute path of an SConscript file exists, or provide (improved) feedback if it doesn&rsquo;t. This is important in situations where you&rsquo;re using variant build directories (build and release) and your builds are spread over many directories.  This is one of the things SCons is particularly poor at reporting diagnostics for.</p>
+
+<p>If this was just Python, without the magic of SCons happening, this really would be trivial, in fact it&rsquo;s one of those things that Python excels at.</p>
+
+<pre><code class="language-python">import os
+path = 'path/to/your/SConscript'
+path = os.path.abspath(os.path.normpath(path))
+if not os.path.exists(path):
+    raise Exception('SConcript does not exist at %s' % path)
+SConscript(path, ...)
+</code></pre>
+
+<p>Given enough SConscript files, this pattern is annoying and worthy of refactoring. One way to do that would be to pull that code out, and put it into an external module. Given that we&rsquo;ll always want to do this with our calls to SConscript, it&rsquo;s probably easier to adjust the SConscript method, rather than adding a second function. Altering the behavior of Python functions and methods at runtime by pre- or post- fixing code is most easily achieved by using <a href="https://wiki.python.org/moin/PythonDecorators">decorators</a>, which is really just a fancy name for a function that wraps another function.</p>
+
+<p>A modern decorator would look something like this:</p>
+
+<pre><code class="language-python"># scommon.py
+import os
+import wrapt
+
+@wrapt.decorator
+def sconcript_validator(wrapped, instance, args, kwargs):
+    path = args[0]
+    path = os.path.abspath(os.path.normpath(path))
+    if not os.path.exists(path):
+        raise Exception('SConcript does not exist at %s' % path)
+    return wrapped(*args, **kwargs)
+</code></pre>
+
+<p>Note that I&rsquo;ve chosen to make use of the <a href="https://github.com/GrahamDumpleton/wrapt">wrapt</a> which deals with all the ugly corner cases of decorators for me.</p>
+
+<p>This means that I can rewrite my SConstruct as:</p>
+
+<pre><code class="language-python"># SConstruct
+import scommon 
+menv = Environment()
+menv.SConscript = scommon.sconcript_validator(menv.SConscript)
+</code></pre>
+
+<p>And at that point I should be able to run SCons as per normal, with a nicely updated SConscript function, and everything should be rainbows and unicorns.</p>
+
+<p>Except it isn&rsquo;t. Instead SCons fails with the traceback</p>
+
+<pre><code class="language-shell">$ scons
+scons: Reading SConscript files ...
+
+scons: *** Export of non-existent variable ''menv''
+File &quot;/Users/username/tmp/scommon.py&quot;, line 10, in sconcript_validator
+</code></pre>
+
+<p>This occurs because SCons does much of it&rsquo;s heavy lifting by making use of the Python callstack, finding targets via introspection of the call frames. Unfortunately, the way it does this is somewhat fragile, expecting calling code to be a certain number of stack frames above (the internals of) SConscript.</p>
+
+<p>From SCons.Script.SConcript:</p>
+
+<pre><code class="language-python"># This is the magic line that actually reads up
+# and executes the stuff in the SConscript file
+# ...
+call_stack[-1].globals.update({stack_bottom:1})
+old_file = call_stack[-1].globals.get('__file__')
+</code></pre>
+
+<p>And eventually:</p>
+
+<pre><code class="language-python">exec _file_ in call_stack[-1].globals
+</code></pre>
+
+<p>The consequence of this is that, to the best of my knowledge, no easy way to decorate the SConscript method.</p>
+
+<p>All&rsquo;s not lost, the dynamic nature of Python means we can reach directly into the SConcript module, introspect data about the code, including getting the original source code (using <a href="https://docs.python.org/2/library/inspect.html">inspect</a>, rewrite the lines of that function, <a href="https://docs.python.org/2/reference/simple_stmts.html#exec">exec</a> that string in the context of the original functions scope, before replacing the function back on the class with <a href="https://docs.python.org/2/library/functions.html#setattr">setattr</a>. The final result, while ugly is functional.</p>
+
+<p>The end result looks like the ugliest Python I&rsquo;ve written for a long while - and somehow I don&rsquo;t think this ones going to make it past code-review.</p>
+
+                    </div>
+                </section>
+                
                 <h1 class="content-subhead">22 May 2015, 09:47</h1>
                 <section class="post">
                     <header class="post-header">
