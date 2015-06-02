@@ -88,7 +88,7 @@ t = N \mathbf{1}
 $$
 
 Where $\mathbf{1}$ is the column vector of ones. While it's possible to solve
-the equation like this, but only just, it's not an effective way to way to use
+the equation like this, but only just, it's not an effective way to use
 a computer to solve the equation.  Solutions to linear equations on a computer
 are solved in the form: 
 
