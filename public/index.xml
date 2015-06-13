@@ -6,8 +6,72 @@
     <description>Recent content on Stateful Transitions</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 02 Jun 2015 21:23:37 +1000</lastBuildDate>
+    <lastBuildDate>Sat, 13 Jun 2015 21:52:09 +1000</lastBuildDate>
     <atom:link href="http://andrewwalker.github.io/statefultransitions/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Gaussian Random Fields</title>
+      <link>http://andrewwalker.github.io/statefultransitions/post/gaussian-fields/</link>
+      <pubDate>Sat, 13 Jun 2015 21:52:09 +1000</pubDate>
+      
+      <guid>http://andrewwalker.github.io/statefultransitions/post/gaussian-fields/</guid>
+      <description>&lt;p&gt;Random fields are an example of a more formally defined noise process that
+can appear visually similar to some forms of procedurally generated noise like
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Perlin_noise&#34;&gt;Perlin noise&lt;/a&gt; or &lt;a href=&#34;https://en.wikipedia.org/wiki/Simplex_noise&#34;&gt;simplex
+noise&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;There are some really nice of examples of descriptions for &lt;a href=&#34;https://en.wikipedia.org/wiki/Random_field&#34;&gt;random
+fields&lt;/a&gt; and in particular &lt;a href=&#34;https://en.wikipedia.org/wiki/Gaussian_random_field&#34;&gt;Gaussian
+random fields&lt;/a&gt; on
+Wikipedia. However, with a few
+&lt;a href=&#34;http://arxiv.org/pdf/1105.2737.pdf&#34;&gt;exceptions&lt;/a&gt;, there doesn&amp;rsquo;t seem to be a
+great deal of literature available on how to generate such fields.  Furthermore, while
+there is the &lt;a href=&#34;http://cran.r-project.org/web/packages/RandomFields/index.html&#34;&gt;RandomFields&lt;/a&gt;
+package on CRAN for R, there don&amp;rsquo;t appear to be any well known Python packages.&lt;/p&gt;
+
+&lt;p&gt;In the search for a good library, I did find an amazing question on the
+&lt;a href=&#34;http://mathematica.stackexchange.com/q/4829&#34;&gt;Mathematica Stack Exchange&lt;/a&gt;,
+where a number of different techniques for genering these fields have been
+presented.&lt;/p&gt;
+
+&lt;p&gt;This Python snippet is a simplified version of the current top voted
+&lt;a href=&#34;http://mathematica.stackexchange.com/a/9951&#34;&gt;answer&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;def fftIndgen(n):
+    a = range(0, n/2+1)
+    b = range(1, n/2)
+    b.reverse()
+    b = [-i for i in b]
+    return a + b
+
+def gaussian_random_field(Pk = lambda k : k**-3.0, size = 100):
+    def Pk2(kx, ky):
+        if kx == 0 and ky == 0:
+            return 0.0
+        return np.sqrt(Pk(np.sqrt(kx**2 + ky**2)))
+    noise = np.fft.fft2(np.random.normal(size = (size, size)))
+    amplitude = np.zeros((size,size))
+    for i, kx in enumerate(fftIndgen(size)):
+        for j, ky in enumerate(fftIndgen(size)):            
+            amplitude[i, j] = Pk2(kx, ky)
+    return np.fft.ifft2(noise * amplitude)
+
+for alpha in [-4.0, -3.0, -2.0]:
+    out = gaussian_random_field(Pk = lambda k: k**alpha, size=256)
+    plt.figure()
+    plt.imshow(out.real, interpolation=&#39;none&#39;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Which produces figures like:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;randomfield3.png&#34; alt=&#34;Image 3&#34; /&gt;
+
+&lt;img src=&#34;randomfield1.png&#34; alt=&#34;Image 1&#34; /&gt;
+
+&lt;img src=&#34;randomfield2.png&#34; alt=&#34;Image 2&#34; /&gt;
+&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Snakes and Ladders</title>
