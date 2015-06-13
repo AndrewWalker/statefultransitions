@@ -57,7 +57,7 @@ for alpha in [-4.0, -3.0, -2.0]:
 
 Which produces figures like:
 
-![Image 3](randomfield3.png)
-![Image 1](randomfield1.png)
-![Image 2](randomfield2.png)
+![Image 3](/randomfield3.png)
+![Image 1](/randomfield1.png)
+![Image 2](/randomfield2.png)
 
