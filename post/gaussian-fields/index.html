@@ -3,17 +3,17 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Markov chains and Directed Graphs &middot; Stateful Transitions</title>
+    <title>Gaussian Random Fields &middot; Stateful Transitions</title>
 
     <meta name="description" content="">
 
     <meta name="twitter:card" content="summary">
     <meta name="twitter:site" content="walkera101" />
-    <meta name="twitter:title" content="Markov chains and Directed Graphs &middot; Stateful Transitions">
+    <meta name="twitter:title" content="Gaussian Random Fields &middot; Stateful Transitions">
     <meta name="twitter:description" content="">
 
     <meta property="og:type" content="article">
-    <meta property="og:title" content="Markov chains and Directed Graphs &middot; Stateful Transitions">
+    <meta property="og:title" content="Gaussian Random Fields &middot; Stateful Transitions">
     <meta property="og:description" content="">
 
     <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700|Oxygen:400,700' rel='stylesheet' type='text/css'>
@@ -58,11 +58,11 @@
         <div>
             
             <div class="posts">
-                <h1 class="content-subhead">22 May 2015, 09:47</h1>
+                <h1 class="content-subhead">13 Jun 2015, 21:52</h1>
                 <section class="post">
                     <header class="post-header">
 
-                        <a href="http://andrewwalker.github.io/statefultransitions/post/markov-chains/" class="post-title">Markov chains and Directed Graphs</a>
+                        <a href="http://andrewwalker.github.io/statefultransitions/post/gaussian-fields/" class="post-title">Gaussian Random Fields</a>
 
                         <p class="post-meta">
                             
@@ -77,97 +77,78 @@
                     <div class="post-share">
                         <div class="post-share-links">
                             <h4 style="">Share</h4>
-                            <a href="#" data-type="facebook" data-url="http://andrewwalker.github.io/statefultransitions/post/markov-chains/" data-title="Markov chains and Directed Graphs" data-description="" data-media="" class="prettySocial fa fa-facebook"></a>
-                            <a href="#" data-type="googleplus" data-url="http://andrewwalker.github.io/statefultransitions/post/markov-chains/" data-description="" class="prettySocial fa fa-google-plus"></a>
+                            <a href="#" data-type="facebook" data-url="http://andrewwalker.github.io/statefultransitions/post/gaussian-fields/" data-title="Gaussian Random Fields" data-description="" data-media="" class="prettySocial fa fa-facebook"></a>
+                            <a href="#" data-type="googleplus" data-url="http://andrewwalker.github.io/statefultransitions/post/gaussian-fields/" data-description="" class="prettySocial fa fa-google-plus"></a>
                             
-                            <a href="#" data-type="twitter" data-url="http://andrewwalker.github.io/statefultransitions/post/markov-chains/" data-description="" data-via="walkera101" class="prettySocial fa fa-twitter"></a>
+                            <a href="#" data-type="twitter" data-url="http://andrewwalker.github.io/statefultransitions/post/gaussian-fields/" data-description="" data-via="walkera101" class="prettySocial fa fa-twitter"></a>
                             
                             
                         </div>
                     </div>
                     <div class="post-description">
-                        <p>One of the simplest possible probabilistic concepts is that of a Finite Markov
-chain.  The basic principle of a Markov chain is that it describes how
-something (a state) changes over time.  In effect, if you start in a state,
-after some time, a transition occurs, and state updates.  If this sounds
-familiar, it&rsquo;s not surprising, Markov chains share many common features with
-directed graphs.</p>
+                        <p>Random fields are an example of a more formally defined noise process that
+can appear visually similar to some forms of procedurally generated noise like
+<a href="https://en.wikipedia.org/wiki/Perlin_noise">Perlin noise</a> or <a href="https://en.wikipedia.org/wiki/Simplex_noise">simplex
+noise</a>.</p>
 
-<p>My interest lies more in their applications to statistical physics (which is a
-fancy term for describing study of the motion of lots of little bits of stuff).
-For my application, Markov chains have been helpful as a tool for developing
-initution into more complex systems.</p>
+<p>There are some really nice of examples of descriptions for <a href="https://en.wikipedia.org/wiki/Random_field">random
+fields</a> and in particular <a href="https://en.wikipedia.org/wiki/Gaussian_random_field">Gaussian
+random fields</a> on
+Wikipedia. However, with a few
+<a href="http://arxiv.org/pdf/1105.2737.pdf">exceptions</a>, there doesn&rsquo;t seem to be a
+great deal of literature available on how to generate such fields.  Furthermore, while
+there is the <a href="http://cran.r-project.org/web/packages/RandomFields/index.html">RandomFields</a>
+package on CRAN for R, there don&rsquo;t appear to be any well known Python packages.</p>
 
-<p>So what are the similarities between Markov chains and Graphs?</p>
+<p>In the search for a good library, I did find an amazing question on the
+<a href="http://mathematica.stackexchange.com/q/4829">Mathematica Stack Exchange</a>,
+where a number of different techniques for genering these fields have been
+presented.</p>
 
-<table>
-<thead>
-<tr>
-<th>Markov Chains</th>
-<th>Graph Theory</th>
-</tr>
-</thead>
+<p>This Python snippet is a simplified version of the current top voted
+<a href="http://mathematica.stackexchange.com/a/9951">answer</a></p>
 
-<tbody>
-<tr>
-<td>Markov Chain</td>
-<td>Directed Graph with edges labelled with transition probability</td>
-</tr>
+<pre><code class="language-python">def fftIndgen(n):
+    a = range(0, n/2+1)
+    b = range(1, n/2)
+    b.reverse()
+    b = [-i for i in b]
+    return a + b
 
-<tr>
-<td>State</td>
-<td>Vertex</td>
-</tr>
+def gaussian_random_field(Pk = lambda k : k**-3.0, size = 100):
+    def Pk2(kx, ky):
+        if kx == 0 and ky == 0:
+            return 0.0
+        return np.sqrt(Pk(np.sqrt(kx**2 + ky**2)))
+    noise = np.fft.fft2(np.random.normal(size = (size, size)))
+    amplitude = np.zeros((size,size))
+    for i, kx in enumerate(fftIndgen(size)):
+        for j, ky in enumerate(fftIndgen(size)):            
+            amplitude[i, j] = Pk2(kx, ky)
+    return np.fft.ifft2(noise * amplitude)
 
-<tr>
-<td>Transition</td>
-<td>Edge</td>
-</tr>
+for alpha in [-4.0, -3.0, -2.0]:
+    out = gaussian_random_field(Pk = lambda k: k**alpha, size=256)
+    plt.figure()
+    plt.imshow(out.real, interpolation='none')
+</code></pre>
 
-<tr>
-<td>$T(i, j) = 0$</td>
-<td>No edge from $(i, j)$</td>
-</tr>
+<p>Which produces figures like:</p>
 
-<tr>
-<td>$T(i, j) &gt; 0$</td>
-<td>Edge from $(i, j)$, with weight $T(i, j)$</td>
-</tr>
+<p><img src="randomfield3.png" alt="Image 3" />
 
-<tr>
-<td>Accessible $i \rightarrow j$</td>
-<td>Reachable</td>
-</tr>
+<img src="randomfield1.png" alt="Image 1" />
 
-<tr>
-<td>Communicating Classes $(i \leftrightarrow j)$</td>
-<td>Strongly Connected Components</td>
-</tr>
-
-<tr>
-<td>Permutation of a MC</td>
-<td>Isomorphism</td>
-</tr>
-
-<tr>
-<td>Transpose $T&rsquo;$</td>
-<td>Flip edges in graph</td>
-</tr>
-
-<tr>
-<td>Absorbing $T(i,i) = 1$</td>
-<td>There exists an edge $(s, s)$, and the out degree of $s = 1$</td>
-</tr>
-</tbody>
-</table>
+<img src="randomfield2.png" alt="Image 2" />
+</p>
 
                     </div>
                     <div id="disqus_thread"></div>
 <script type="text/javascript">
     var disqus_shortname = 'statefultransitions';
-    var disqus_identifier = 'http:\/\/andrewwalker.github.io\/statefultransitions\/post\/markov-chains\/';
-    var disqus_title = 'Markov chains and Directed Graphs';
-    var disqus_url = 'http:\/\/andrewwalker.github.io\/statefultransitions\/post\/markov-chains\/';
+    var disqus_identifier = 'http:\/\/andrewwalker.github.io\/statefultransitions\/post\/gaussian-fields\/';
+    var disqus_title = 'Gaussian Random Fields';
+    var disqus_url = 'http:\/\/andrewwalker.github.io\/statefultransitions\/post\/gaussian-fields\/';
 
     (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
